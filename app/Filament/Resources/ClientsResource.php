@@ -5,6 +5,8 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\ClientsResource\Pages;
 use App\Filament\Resources\ClientsResource\RelationManagers;
 use App\Models\Clients;
+use App\Rules\ValidINN;
+use App\Rules\ValidSNILS;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -17,11 +19,13 @@ use Filament\Forms\Components\Section;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
+
 class ClientsResource extends Resource
 {
     protected static ?string $model = Clients::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+
 
     public static function form(Form $form): Form
     {
@@ -31,11 +35,12 @@ class ClientsResource extends Resource
                     ->schema([
                         TextInput::make('name')->required(),
                         Textarea::make('phone')->required(),
-                        Textarea::make('inn')->required(),
-                        Textarea::make('snils')->required(),
+                        TextInput::make('inn')->required()->rules([new ValidINN()]),
+                        Textarea::make('snils')->required()->rules([new ValidSNILS()]),
                         Textarea::make('email')->required(),
                         Textarea::make('type')->required(),
                         Textarea::make('comments')->required(),
+
 
                     ])
             ]);
